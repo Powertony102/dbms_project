@@ -1,0 +1,522 @@
+/* Header styles */
+.header {
+    background-color: #4267B2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-bar ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.nav-bar ul li {
+    display: inline;
+}
+
+.nav-bar ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.nav-bar ul li a:hover {
+    color: #E8F0FE;
+}
+
+/* Main content styles */
+.main-content {
+    padding: 25px;
+    max-width: 100%;
+    min-width: 500px;
+    width: 60%;
+    margin: 30px auto;
+    background-color: white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    flex: 1;
+    border: 1px solid #E0E0E0;
+}
+
+.content-header h2 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: #4267B2;
+}
+
+.content-header p {
+    font-size: 1em;
+    color: #666;
+}
+
+/* Card styles */
+.card {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #4267B2;
+}
+
+.card p {
+    color: #666;
+}
+
+.card button {
+    background-color: #4267B2;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+    background-color: #365899;
+}
+
+/* Footer fixed styles */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F0F2F5;
+}
+
+.footer {
+    background-color: #4267B2;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: relative;
+    bottom: 0;
+    width: 100vw;
+    margin: 0;
+    box-sizing: border-box;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Balance display styles */
+.balance-display {
+    font-size: 2em;
+    color: #13c713;
+    font-weight: bold;
+    margin: 20px 0;
+    text-align: center;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #E0E0E0;
+}
+
+/* Form input styles */
+form input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #DDDFE2;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+/* Form button styles */
+form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4267B2;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #365899;
+}
+
+/* Order details styles */
+.order-details {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+}
+
+.order-details p {
+    margin: 10px 0;
+    color: #666;
+    font-size: 1em;
+}
+
+.order-details h3 {
+    margin-top: 0;
+    font-size: 1.8em;
+    color: #4267B2;
+}
+
+/* Review section styles */
+.review-section {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+}
+
+.review-section h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #4267B2;
+}
+
+.review-section label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #333;
+}
+
+.review-section textarea {
+    width: calc(100% - 0px);
+    padding: 12px;
+    margin: 0 auto;
+    border: 1px solid #DDDFE2;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 15px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.review-section button {
+    background-color: #4267B2;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.review-section button:hover {
+    background-color: #365899;
+}
+
+/* Table image styles */
+.Table-image img {
+    width: auto;
+    height: auto;
+    max-height: 300px;
+    max-width: 500px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table details styles */
+.Table-details {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+}
+
+.Table-details p {
+    margin: 10px 0;
+    color: #666;
+    font-size: 1em;
+}
+
+/* Reserve button styles */
+.reserve-button {
+    background-color: #4267B2;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.reserve-button:hover {
+    background-color: #365899;
+}
+
+/* Table reviews styles */
+.Table-reviews {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+}
+
+.review p {
+    margin: 5px 0;
+    color: #333;
+    font-size: 1em;
+}
+
+.review strong {
+    color: #4267B2;
+}
+
+/* Table list styles */
+.Table-list {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+}
+
+.Table-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #DDDFE2;
+    border-radius: 5px;
+    background-color: #F9FAFB;
+}
+
+.Table-item h4 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #4267B2;
+}
+
+.Table-item p {
+    margin: 5px 0 10px;
+    color: #666;
+    font-size: 1em;
+}
+
+/* Assign button styles */
+.assign-button {
+    background-color: #42B72A;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.assign-button:hover {
+    background-color: #36A420;
+}
+
+/* Form section styles */
+.checkin-checkout {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+}
+
+.checkin-checkout label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #333;
+}
+
+.checkin-checkout input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #DDDFE2;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+/* Button styles */
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.checkin-button, .checkout-button {
+    flex: 1;
+    padding: 12px;
+    font-size: 1em;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.checkin-button {
+    background-color: #42B72A;
+}
+
+.checkin-button:hover {
+    background-color: #36A420;
+}
+
+.checkout-button {
+    background-color: #FA383E;
+}
+
+.checkout-button:hover {
+    background-color: #E03237;
+}
+
+/* General management section styles */
+form {
+    background-color: white;
+    padding: 25px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #333;
+    font-weight: 500;
+}
+
+form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #DDDFE2;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+/* General button styles */
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    font-size: 1em;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+/* User management button styles */
+.edit-user-button {
+    background-color: #4267B2;
+}
+
+.edit-user-button:hover {
+    background-color: #365899;
+}
+
+.delete-user-button {
+    background-color: #FA383E;
+}
+
+.delete-user-button:hover {
+    background-color: #E03237;
+}
+
+/* Table management button styles */
+.edit-Table-button {
+    background-color: #42B72A;
+}
+
+.edit-Table-button:hover {
+    background-color: #36A420;
+}
+
+.delete-Table-button {
+    background-color: #F5B400;
+}
+
+.delete-Table-button:hover {
+    background-color: #E0A800;
+}
+
+/* Table edit form styles */
+.edit-Table textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #DDDFE2;
+    border-radius: 5px;
+    font-size: 1em;
+    resize: vertical;
+}
+
+.edit-Table input[type="file"] {
+    padding: 8px;
+    font-size: 1em;
+    border: 1px solid #DDDFE2;
+    border-radius: 5px;
+    background-color: #F9FAFB;
+}
+
+.save-button {
+    background-color: #42B72A;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.save-button:hover {
+    background-color: #36A420;
+}

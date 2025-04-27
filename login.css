@@ -1,0 +1,235 @@
+/* 现代化登录界面 CSS */
+
+:root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #6bb9f0;
+    --accent-color: #3498db;
+    --text-color: #333;
+    --light-text: #666;
+    --background: #f9f9f9;
+    --card-bg: #ffffff;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+    --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    text-align: center;
+    position: relative;
+    width: auto;
+    transform: none;
+    top: auto;
+    left: auto;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1000px;
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin: 2rem 0;
+}
+
+.left-div, .right-div {
+    flex: 1;
+    padding: 3rem;
+    transition: all 0.3s ease;
+}
+
+.left-div {
+    background-color: var(--card-bg);
+}
+
+.right-div {
+    background-color: rgba(74, 111, 165, 0.05);
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.login-register {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    display: block;
+    position: relative;
+}
+
+.login-register::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent-color);
+    border-radius: 3px;
+}
+
+.row-line {
+    display: none; /* 移除旧的分隔线 */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--light-text);
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.message-box {
+    margin: 1.5rem auto;
+    padding: 1rem;
+    border: none;
+    background-color: rgba(46, 204, 113, 0.1);
+    color: var(--success-color);
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 0 1px rgba(46, 204, 113, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-box::before {
+    content: '✓';
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.warn-box {
+    margin: 1.5rem auto;
+    padding: 1rem;
+    border: none;
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--error-color);
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 0 1px rgba(231, 76, 60, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.warn-box::before {
+    content: '⚠';
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        width: 95%;
+    }
+
+    .left-div, .right-div {
+        width: 100%;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .login-register {
+        font-size: 1.5rem;
+    }
+}
+
+/* 添加装饰元素 */
+.container::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(52, 152, 219, 0.1);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* 添加平滑过渡 */
+* {
+    transition: all 0.3s ease;
+}
