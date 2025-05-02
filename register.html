@@ -1,82 +1,45 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" type="text/css" href="login.css">
-
-    <title>DBMS Project Team 6</title>
-
+    <title>DBMS Project Group 6</title>
 </head>
 
 <body>
-
     <h1>Restaurant Reservation Management System</h1><br>
-
     <div class="container">
-
         <div class="left-div">
-
             <span class="login-register">Register</span>
-
             <div class="row-line"></div>
-
             <form id="RegisterForm" action="reg-check.php" method="post">
-
                 <label for="name">Name:</label>
-
                 <input type="text" class="name" name="name" placeholder="Please Enter your name" autocomplete="off" required>
 
-
-
                 <label for="phone">Phone numbers:</label>
-
                 <input type="text" name="phone" placeholder="Please Enter your phone numbers (separated by space)" id="phone" required>
 
-                
-
                 <label for="password">Password:</label>
-
                 <input type="password" id="password" name="password" placeholder="Please Enter Password" required>
 
-                
-
                 <label for="confirmPassword">Confirm Password:</label>
-
                 <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Please Confirm Password" required>
 
-                
-
                 <select id="usrType" name="usrType">
-
                     <option value="receptionist">Receptionist</option>
-
                     <option value="customer">Customer</option>
-
                     <option value="cleaner">Cleaner</option>
-
                 </select>
 
-                
-
                 <button type="submit">Register</button>
-
             </form>
 
             <a href="login.html" style="margin-top: 20px; display: block; color: rgb(134, 139, 146);">User Login</a>
-
         </div>
-
     </div>
-
     <div id="message"></div>
-
 </body>
 
 </html>
-

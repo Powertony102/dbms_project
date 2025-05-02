@@ -76,13 +76,13 @@
             $stmt->execute();
 
             $conn->commit();
-            echo "房间成功分配！";
+            echo "Room assigned successfully!";
         } else {
-            echo "没有符合条件的房间。";
+            echo "No suitable room available.";
         }
     } catch (Exception $e) {
         $conn->rollback();
-        echo "错误: " . $e->getMessage();
+        echo "Error: " . $e->getMessage();
     }
 
     // if successful, redirect to order page

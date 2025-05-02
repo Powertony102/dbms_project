@@ -20,5 +20,5 @@ if($conn->query($sql) === TRUE){
     echo "<br>";
     echo "<a href='credit.php'>Back to My Wallet</a>";
 }
-
+$conn->close();
 ?>

@@ -24,7 +24,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="main.css">
-    <title>DBMS Project Team 6</title>
+    <title>DBMS Project Group 6</title>
 </head>
 <body>
     <!-- title -->
@@ -98,9 +98,6 @@
         <!-- Table comment -->
         <div class="Table-reviews">
             <h3>Customer Reviews</h3>
-            <!-- <div class="review">
-                <p><strong>John Doe:</strong> "Amazing stay! The Table was clean and the view was breathtaking."</p>
-            </div> -->
             <?php
                 // get the comments for this Table type
                 $sql = "SELECT cID, User.name, comment
@@ -115,18 +112,11 @@
                         ORDER BY cID DESC LIMIT 20;
                         ";
                 $result = $conn->query($sql);
-
-                // ouput the sql for debugging
-                // echo $sql;
-
-
-
                 if (!$result) {
                     // If the query failed
                     echo "<p>Database query failed: " . $conn->error . "</p>";
                     exit();
                 }
-
                 if($result->num_rows > 0){
                     
                     while($row = $result->fetch_assoc()){
@@ -138,16 +128,13 @@
                 else{
                     echo "<p>No comments yet</p>";
                 }
-
             ?>
-        </div>
-            
+        </div> 
         </section>
     </main>
-
     <!-- footer -->
     <footer class="footer">
-        <p>&copy; DBMS Project Team 6</p>
+        <p>&copy; DBMS Project Group 6</p>
     </footer>
 </body>
 

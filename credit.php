@@ -24,7 +24,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="main.css">
-    <title>DBMS Project Team 6</title>
+    <title>DBMS Project Group 6</title>
 </head>
 <body>
     <!-- title -->
@@ -83,8 +83,7 @@
 
     <!-- footer -->
     <footer class="footer">
-        <p>&copy; DBMS Project Team 6</p>
+        <p>&copy; DBMS Project Group 6</p>
     </footer>
 </body>
-
 </html>

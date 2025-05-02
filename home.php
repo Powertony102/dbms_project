@@ -18,16 +18,13 @@
     }
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="main.css">
-    <title>DBMS Project Team 6</title>
+    <title>DBMS Project Group 6</title>
 </head>
 <body>
     <!-- title -->
@@ -52,27 +49,6 @@
         </section>
 
         <section class="content-body">
-            <!-- <div class="card">
-                <h3>Card Title</h3>
-                <p>Card content with concise, useful information or action items.</p>
-                <button>Learn More</button>
-            </div>
-
-            <div class="card">
-                <h3>Card Title</h3>
-                <p>Card content with concise, useful information or action items.</p>
-                <button>Learn More</button>
-            </div> -->
-
-            <!-- <div class="card">
-                <h3>Deluxe King Table</h3>
-                <p>
-                    Spacious Table featuring a king-sized bed, a private balcony with city views, a luxurious bathTable, 
-                    and complimentary high-speed Wi-Fi. Perfect for a relaxing getaway.
-                </p>
-                <button onclick="window.location.href='book.html'">Learn More</button>
-            </div> -->
-
             <?php
                 //connect to the database
                 include('connect_DB.php');
@@ -93,17 +69,13 @@
                     echo "<p>No available Tables</p>";
                 }
 
-            ?>
-        
-            
-            
+            ?>    
         </section>
     </main>
 
     <!-- footer -->
     <footer class="footer">
-        <p>&copy; DBMS Project Team 6</p>
+        <p>&copy; DBMS Project Group 6</p>
     </footer>
 </body>
-
 </html>

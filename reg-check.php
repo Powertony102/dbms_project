@@ -35,8 +35,5 @@ if($conn->query($sql) === TRUE){
     echo "Please try again";
     echo "<br>Back to <a href='register.html'>register</a>";
 }
-
-
-
-
+$conn->close();
 ?>

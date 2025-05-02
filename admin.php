@@ -78,18 +78,16 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; DBMS Project Team 6</p>
+        <p>&copy; DBMS Project Group 6</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 添加按钮事件监听器
             document.getElementById('editUserBtn').addEventListener('click', handleEditUser);
             document.getElementById('editTableBtn').addEventListener('click', handleEditTable);
             document.getElementById('editTableTypeBtn').addEventListener('click', handleEditTableType);
         });
 
-        // Modal 管理
         const Modal = {
             show: function(title, content) {
                 const modal = document.createElement("div");
@@ -109,7 +107,6 @@
             }
         };
 
-        // API 服务
         const ApiService = {
             fetch: async function(url) {
                 try {
@@ -134,7 +131,6 @@
             }
         };
 
-        // 用户管理
         const UserManager = {
             edit: async function() {
                 const userID = document.getElementById("userID").value;
@@ -181,7 +177,6 @@
             }
         };
 
-        // 餐桌管理
         const TableManager = {
             edit: async function() {
                 const TableID = document.getElementById("TableID").value;
@@ -224,7 +219,6 @@
             }
         };
 
-        // 餐桌类型管理
         const TableTypeManager = {
             edit: async function() {
                 const TableTypeID = document.getElementById("TableTypeID").value;
@@ -271,7 +265,6 @@
             }
         };
 
-        // 处理函数
         function handleEditUser() {
             UserManager.edit();
         }

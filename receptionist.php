@@ -20,7 +20,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="main.css">
-    <title>DBMS Project Team 6</title>
+    <title>DBMS Project Group 6</title>
     <script>
         // deal with check-in
         function handleCheckIn() {
@@ -85,10 +85,6 @@
         <h1>Restaurant Reservation Management System</h1>
         <nav class="nav-bar">
             <ul>
-                <!-- <li><a href="home.html">Home</a></li> -->
-                <!-- <li><a href="credit.html">My Wallet</a></li> -->
-                <!-- <li><a href="order.html">My Orders</a></li> -->
-                <!-- <li><a href="settings.html">Settings</a></li> -->
                 <li><a href="logout.php" style="color: red;">Logout</a></li>
             </ul>
         </nav>
@@ -117,7 +113,7 @@
 
     <!-- footer -->
     <footer class="footer">
-        <p>&copy; DBMS Project Team 6</p>
+        <p>&copy; DBMS Project Group 6</p>
     </footer>
 </body>
 
