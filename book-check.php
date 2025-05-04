@@ -20,8 +20,8 @@
         exit();
     }
 
-    // get the get parameter rtID
-    $rtID = $_GET['rtID'];
+    // get the get parameter ttID
+    $ttID = $_GET['ttID'];
 
     // connect to the database
     include('connect_DB.php');
@@ -30,7 +30,7 @@
     $userID = $_SESSION['userID'];
 
     // get the Table type information
-    $sql = "SELECT * FROM Table_type WHERE rtID = $rtID;";
+    $sql = "SELECT * FROM Table_type WHERE ttID = $ttID;";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
 
@@ -53,26 +53,26 @@
     try {
         // 查找符合条件的房间
         $stmt = $conn->prepare("
-            SELECT `Table`.rID 
+            SELECT `Table`.tID 
             FROM `Table` 
-            JOIN Table_Table_type ON `Table`.rID = Table_Table_type.rID
-            LEFT JOIN Order_Table ON `Table`.rID = Order_Table.rID
+            JOIN Table_Table_type ON `Table`.tID = Table_Table_type.tID
+            LEFT JOIN Order_Table ON `Table`.tID = Order_Table.tID
             LEFT JOIN Ord ON Order_Table.oID = Ord.oID
-            WHERE Table_Table_type.rtID = ? 
+            WHERE Table_Table_type.ttID = ? 
             AND `Table`.clean_status = 'clean'
             AND (Ord.oID IS NULL OR Ord.check_in_status IN ('completed', 'cancelled'))
             LIMIT 1
         ");
-        $stmt->bind_param("i", $rtID);
+        $stmt->bind_param("i", $ttID);
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($row = $result->fetch_assoc()) {
-            $rID = $row['rID'];
+            $tID = $row['tID'];
 
             // insert Order_Table
-            $stmt = $conn->prepare("INSERT INTO Order_Table (oID, rID) VALUES (?, ?)");
-            $stmt->bind_param("ii", $oID, $rID);
+            $stmt = $conn->prepare("INSERT INTO Order_Table (oID, tID) VALUES (?, ?)");
+            $stmt->bind_param("ii", $oID, $tID);
             $stmt->execute();
 
             $conn->commit();

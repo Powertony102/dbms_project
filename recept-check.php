@@ -22,7 +22,7 @@ function processCheckIn($conn, $orderID) {
               SET 
                 check_in_status = 'occupying', 
                 order_time = NOW(),
-                price = (SELECT price FROM `Table` WHERE rID = (SELECT rID FROM Order_Table WHERE oID = ? LIMIT 1))
+                price = (SELECT price FROM `Table` WHERE tID = (SELECT tID FROM Order_Table WHERE oID = ? LIMIT 1))
               WHERE oID = ?";
               
     $stmt = $conn->prepare($query);
@@ -38,18 +38,51 @@ function processCheckIn($conn, $orderID) {
 /**
  * Process check-out action
  * Updates order status to 'completed' and marks table as dirty
+ * Deducts the total cost from the user's balance
  */
 function processCheckOut($conn, $orderID) {
+
     // Start transaction
     $conn->begin_transaction();
     
+    try {
+        // 1. Calculate total cost
+        $stmt = $conn->prepare("SELECT SUM(Menu.price * Orders_Dishes.quantity) AS total
+                                FROM Orders_Dishes
+                                JOIN Menu ON Orders_Dishes.dID = Menu.dID
+                                WHERE Orders_Dishes.oID = ?");
+        $stmt->bind_param("i", $orderID);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $totalCost = $row['total'] ?? 0;
+
+        // 2. Deduct from user balance
+        $stmt = $conn->prepare("UPDATE User u
+                                JOIN Customer_Order co ON u.uID = co.customer_id
+                                SET u.balance = u.balance - ?
+                                WHERE co.oID = ?");
+        $stmt->bind_param("di", $totalCost, $orderID);
+        $stmt->execute();
+
+        // 3. Update order status
+        $stmt = $conn->prepare("UPDATE Ord SET check_in_status = 'completed' WHERE oID = ?");
+        $stmt->bind_param("i", $orderID);
+        $stmt->execute();
+
+        $conn->commit();
+        return "Check-out successful.";
+    } catch (Exception $e) {
+        $conn->rollback();
+        return "Error during check-out: " . $e->getMessage();
+    }
+
     try {
         // Update order status to completed
         $query1 = "UPDATE Ord
                   SET 
                     check_in_status = 'completed', 
                     order_time = NOW(),
-                    price = (SELECT price FROM `Table` WHERE rID = (SELECT rID FROM Order_Table WHERE oID = ? LIMIT 1))
+                    price = (SELECT price FROM `Table` WHERE tID = (SELECT tID FROM Order_Table WHERE oID = ? LIMIT 1))
                   WHERE oID = ?";
                   
         $stmt1 = $conn->prepare($query1);
@@ -59,7 +92,7 @@ function processCheckOut($conn, $orderID) {
         // Update table status to dirty
         $query2 = "UPDATE `Table`
                   SET clean_status = 'dirty'
-                  WHERE rID = (SELECT rID FROM Order_Table WHERE oID = ? LIMIT 1)";
+                  WHERE tID = (SELECT tID FROM Order_Table WHERE oID = ? LIMIT 1)";
                   
         $stmt2 = $conn->prepare($query2);
         $stmt2->bind_param("s", $orderID);

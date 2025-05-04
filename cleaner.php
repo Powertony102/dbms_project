@@ -40,7 +40,7 @@ function getDirtyTables($conn) {
 // Function to mark table as clean
 function markTableAsClean($conn, $tableId) {
     $tableId = $conn->real_escape_string($tableId);
-    $sql = "UPDATE `Table` SET clean_status = 'clean' WHERE rID = '$tableId'";
+    $sql = "UPDATE `Table` SET clean_status = 'clean' WHERE tID = '$tableId'";
     
     return $conn->query($sql);
 }
@@ -50,8 +50,8 @@ $errorMessage = '';
 $successMessage = '';
 
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rID'])) {
-    $tableId = $_POST['rID'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tID'])) {
+    $tableId = $_POST['tID'];
     
     if (markTableAsClean($conn, $tableId)) {
         $successMessage = "Table #{$tableId} has been marked as clean.";
@@ -107,10 +107,10 @@ $conn->close();
                 <div class="tables-container">
                     <?php foreach ($tablesDirty as $table): ?>
                         <div class="table-item">
-                            <h4>Table #<?php echo htmlspecialchars($table['rID']); ?></h4>
+                            <h4>Table #<?php echo htmlspecialchars($table['tID']); ?></h4>
                             <p><strong>Status:</strong> <?php echo htmlspecialchars($table['clean_status']); ?></p>
                             <form action="cleaner.php" method="POST">
-                                <input type="hidden" name="rID" value="<?php echo htmlspecialchars($table['rID']); ?>">
+                                <input type="hidden" name="tID" value="<?php echo htmlspecialchars($table['tID']); ?>">
                                 <button type="submit" class="assign-button">Mark as Clean</button>
                             </form>
                         </div>

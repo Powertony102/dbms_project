@@ -45,11 +45,11 @@
         //connect to the database
         include('connect_DB.php');
 
-        // get the get parameter rtID
-        $rtID = $_GET['rtID'];
+        // get the get parameter ttID
+        $ttID = $_GET['ttID'];
 
         // get the Table type information
-        $sql = "SELECT * FROM Table_type WHERE rtID = '$rtID';";
+        $sql = "SELECT * FROM Table_type WHERE ttID = '$ttID';";
         $result = $conn->query($sql);
         // check if the Table type exists
         if($result->num_rows == 0){
@@ -90,7 +90,7 @@
                     echo "<p style='color: red;'>You don't have enough balance to reserve this Table</p>";
                 }
                 else{
-                    echo "<button class=\"reserve-button\" onclick=\"window.location.href='book-check.php?rtID=$rtID'\">Reserve This Table</button>";
+                    echo "<button class=\"reserve-button\" onclick=\"window.location.href='book-check.php?ttID=$ttID'\">Reserve This Table</button>";
                 }
             ?>
         </div>
@@ -102,13 +102,13 @@
                 // get the comments for this Table type
                 $sql = "SELECT cID, User.name, comment
                         FROM Table_type
-                        JOIN Table_Table_type USING (rtID)
-                        JOIN Order_Table USING (rID)
+                        JOIN Table_Table_type USING (ttID)
+                        JOIN Order_Table USING (tID)
                         JOIN Customer_Order Using (oID)
                         JOIN User ON (User.uID = Customer_Order.customer_id)
                         JOIN Order_Comment USING (oID)
                         JOIN Comment USING (cID)
-                        WHERE rtID = $rtID
+                        WHERE ttID = $ttID
                         ORDER BY cID DESC LIMIT 20;
                         ";
                 $result = $conn->query($sql);

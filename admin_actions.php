@@ -90,7 +90,7 @@ function fetchTable($conn) {
             throw new Exception('Table ID is required');
         }
 
-        $stmt = $conn->prepare("SELECT * FROM `Table` WHERE rID = ?");
+        $stmt = $conn->prepare("SELECT * FROM `Table` WHERE tID = ?");
         $stmt->bind_param("i", $tableID);
         
         if (!$stmt->execute()) {
@@ -121,7 +121,7 @@ function updateTable($conn) {
         exit;
     }
 
-    $sql = "UPDATE `Table` SET clean_status = ? WHERE rID = ?";
+    $sql = "UPDATE `Table` SET clean_status = ? WHERE tID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("si", $clean_status, $tableID);
     if ($stmt->execute()) {
@@ -139,7 +139,7 @@ function fetchTableType($conn) {
         exit;
     }
 
-    $sql = "SELECT * FROM Table_type WHERE rtID = ?";
+    $sql = "SELECT * FROM Table_type WHERE ttID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $TableTypeID);
     $stmt->execute();
@@ -164,7 +164,7 @@ function updateTableType($conn) {
         exit;
     }
 
-    $sql = "UPDATE Table_type SET introduction = ?, price = ?, remain = ? WHERE rtID = ?";
+    $sql = "UPDATE Table_type SET introduction = ?, price = ?, remain = ? WHERE ttID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sdii", $introduction, $price, $remain, $TableTypeID);
     if ($stmt->execute()) {

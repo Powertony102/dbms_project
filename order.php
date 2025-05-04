@@ -58,7 +58,7 @@
                 $userID = $_SESSION['userID'];
                 $sql = "SELECT DISTINCT
                         ord.oID AS OrderID,
-                        Table_type.rtID AS TableTypeID,
+                        Table_type.ttID AS TableTypeID,
                         Table_type.name AS TableTypeName,
                         ord.order_time AS OrderDate,
                         ord.price AS Price,
@@ -73,11 +73,11 @@
                         JOIN 
                             Order_Table ON ord.oID = Order_Table.oID
                         JOIN 
-                            `Table` ON Order_Table.rID = `Table`.rID
+                            `Table` ON Order_Table.tID = `Table`.tID
                         JOIN 
-                            Table_Table_type ON `Table`.rID = Table_Table_type.rID
+                            Table_Table_type ON `Table`.tID = Table_Table_type.tID
                         JOIN 
-                            Table_type ON Table_Table_type.rtID = Table_type.rtID
+                            Table_type ON Table_Table_type.ttID = Table_type.ttID
                         LEFT JOIN 
                             Order_Comment ON Ord.oID = Order_Comment.oID
                         LEFT JOIN 

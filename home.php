@@ -62,7 +62,7 @@
                         echo "<div class='card'>";
                         echo "<h3>".$row['name']."</h3>";
                         echo "<p>".$row['introduction']."</p>";
-                        echo "<button onclick=\"window.location.href='book.php?rtID=". $row['rtID'] ."'\">Learn More</button>";
+                        echo "<button onclick=\"window.location.href='book.php?ttID=". $row['ttID'] ."'\">Learn More</button>";
                         echo "</div>";
                     }
                 }else{

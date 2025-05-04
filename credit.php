@@ -62,7 +62,11 @@
                         $sql = "SELECT balance FROM User WHERE uID = '$userID';";
                         $result = $conn->query($sql);
                         $row = $result->fetch_assoc();
-                        echo "<span>￥" . $row['balance'] . "</span>";
+                        if ($row && isset($row['balance'])) {
+                            echo "<span>￥" . $row['balance'] . "</span>";
+                        } else {
+                            echo "<span>￥0</span>"; // 默认值
+                        }                        
                     ?>
                 </div>
             </div>
