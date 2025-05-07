@@ -23,7 +23,7 @@ function checkUserType() {
     }
 }
 
-// Order retrieval function
+// Order retrieval function with corrected price calculation
 function getOrderDetails($conn, $userID, $orderID) {
     $userID = (int)$userID;
     $orderID = (int)$orderID;
@@ -34,7 +34,12 @@ function getOrderDetails($conn, $userID, $orderID) {
             Table_type.name AS TableTypeName,
             `Table`.tID AS TableID,
             Ord.order_time AS OrderDate,
-            Ord.price AS Price,
+            COALESCE(
+                (SELECT SUM(Menu.price * Orders_Dishes.quantity) 
+                 FROM Orders_Dishes 
+                 JOIN Menu ON Orders_Dishes.dID = Menu.dID 
+                 WHERE Orders_Dishes.oID = Ord.oID), 0
+            ) + Table_type.price AS TotalPrice,
             Ord.check_in_status AS OrderStatus,
             Comment.comment AS Comment
             FROM 
@@ -79,13 +84,13 @@ function displayErrorMessage($orderID, $userID) {
     echo '</div>';
 }
 
-// Render order details function
+// Render order details function with updated price field name
 function renderOrderDetails($order) {
     echo '<div class="order-details">';
     echo '<h3>Order #' . htmlspecialchars($order['OrderID']) . '</h3>';
     echo '<p><strong>Table Type:</strong> ' . htmlspecialchars($order['TableTypeName']) . '</p>';
     echo '<p><strong>Date:</strong> ' . htmlspecialchars($order['OrderDate']) . '</p>';
-    echo '<p><strong>Total Price:</strong> $' . htmlspecialchars($order['Price']) . '</p>';
+    echo '<p><strong>Total Price:</strong> $' . htmlspecialchars($order['TotalPrice']) . '</p>';
     echo '<p><strong>Table ID:</strong> ' . htmlspecialchars($order['TableID']) . '</p>';
     echo '<p><strong>Status:</strong> ' . htmlspecialchars($order['OrderStatus']) . '</p>';
     echo '<p><strong>Comment:</strong> ' . htmlspecialchars($order['Comment'] ?? 'No comment yet') . '</p>';
@@ -154,38 +159,38 @@ $conn->close();
         
             <?php if ($orderDetails): ?>
             <div class="review-section">
-                <h3>
+                <!-- Dish Ordering Section -->
+                <div>
+                    <?php
+                    if ($orderDetails['OrderStatus'] === 'occupying') {
+                        echo "<h3>Add Dishes to Your Order</h3>";
+                        echo '<form method="get" action="add-dish-to-order.php">';
+                        echo '<label class="form-label"><strong>You can continue ordering dishes here:</strong></label>';
+                        echo '<input type="hidden" name="order_id" value="' . $orderDetails['OrderID'] . '">';
+                        echo '<button type="submit" class="btn btn-primary">Order Dishes</button>';
+                        echo '</form><br><br>';
+                    }
+                    ?>
+                </div>
 
-<!-- Dish Ordering Section -->
-    <div>
-        <?php
-        if ($orderDetails['OrderStatus'] === 'occupying') {
-            echo "<h3>Add Dishes to Your Order</h3>";
-            echo '<form method="get" action="add-dish-to-order.php">';
-            echo '<label class="form-label"><strong>You can continue ordering dishes here:</strong></label>';
-            echo '<input type="hidden" name="order_id" value="' . $orderDetails['OrderID'] . '">';
-            echo '<button type="submit" class="btn btn-primary">Order Dishes</button>';
-            echo '</form><br><br>';
-        }
-        ?>
-    </div>
+                <!-- Reviewing Section -->
+                <div>
+                    <h3>Leave a Review</h3>
+                    <form action="submit-review.php" method="post">
+                    <label for="review"><strong>Your Review:</strong></label>
+                    <textarea id="review" name="review" rows="5" placeholder="Write your experience here..." required></textarea>
+                    <input type="hidden" name="oID" value="<?php echo htmlspecialchars($orderID); ?>">
+                    <button type="submit">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+            <?php endif; ?>
+        </section>
+    </main>
 
-<!-- Reviewing Section -->
-<div>
-    <h3>Leave a Review</h3>
-    <form action="submit-review.php" method="post">
-    <label for="review"><strong>Your Review:</strong></label>
-    <textarea id="review" name="review" rows="5" placeholder="Write your experience here..." required></textarea>
-    <input type="hidden" name="oID" value="<?php echo htmlspecialchars($orderID); ?>">
-    <button type="submit">Submit Review</button>
-</div>
-<?php endif; ?>
-</section>
-</main>
-
-<!-- Footer -->
-<footer class="footer">
-    <p>&copy; DBMS Project Group 6</p>
-</footer>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; DBMS Project Group 6</p>
+    </footer>
 </body>
 </html>
