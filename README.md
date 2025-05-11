@@ -15,7 +15,6 @@ This project aims to develop a modern restaurant management system that addresse
 - **Comment Feedback**: Customers can provide feedback on services
 
 ## Database Design
-![db_design](/doc/db_design.png)
 
 ### ER Diagram
 ![ER Diagram](/doc/report/ER.png)
