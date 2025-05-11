@@ -55,7 +55,3 @@ The system includes multiple interfaces designed for different roles:
 - Li Jiale (2330026073) - Code and database implementation
 - Tian Zhiwen (2230033036) - ER diagram design, trigger implementation, report writing
 - Yan Shan (2230033048) - Data insertion
-
-## Installation and Usage
-
-[Add system installation and usage instructions here]
