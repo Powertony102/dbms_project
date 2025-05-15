@@ -41,46 +41,45 @@
   >
 ]>
 <requests version="1.0">
-  <internal package="biblatex" priority="9" active="0">
+  <internal package="biblatex" priority="9" active="1">
     <generic>latex</generic>
     <provides type="dynamic">
-      <file>DBMS_report.bcf</file>
+      <file>COMP3013_Group6.bcf</file>
     </provides>
     <requires type="dynamic">
-      <file>DBMS_report.bbl</file>
+      <file>COMP3013_Group6.bbl</file>
     </requires>
     <requires type="static">
       <file>blx-dm.def</file>
-      <file>blx-unicode.def</file>
       <file>blx-compat.def</file>
       <file>biblatex.def</file>
       <file>standard.bbx</file>
       <file>numeric.bbx</file>
       <file>numeric-comp.bbx</file>
       <file>ieee.bbx</file>
-      <file>numeric-comp.cbx</file>
+      <file>numeric-verb.cbx</file>
       <file>ieee.cbx</file>
       <file>biblatex.cfg</file>
       <file>english.lbx</file>
     </requires>
   </internal>
-  <external package="biblatex" priority="5" active="0">
+  <external package="biblatex" priority="5" active="1">
     <generic>biber</generic>
     <cmdline>
       <binary>biber</binary>
-      <infile>DBMS_report</infile>
+      <infile>COMP3013_Group6</infile>
     </cmdline>
     <input>
-      <file>DBMS_report.bcf</file>
+      <file>COMP3013_Group6.bcf</file>
     </input>
     <output>
-      <file>DBMS_report.bbl</file>
+      <file>COMP3013_Group6.bbl</file>
     </output>
     <provides type="dynamic">
-      <file>DBMS_report.bbl</file>
+      <file>COMP3013_Group6.bbl</file>
     </provides>
     <requires type="dynamic">
-      <file>DBMS_report.bcf</file>
+      <file>COMP3013_Group6.bcf</file>
     </requires>
     <requires type="editable">
       <file>references.bib</file>

@@ -320,7 +320,7 @@ All schemas are in \textbf{Third Normal Form (3NF)} because:
     \item \textbf{User}: \underline{uID} is the primary key; attributes such as name, phone, user\_type, and balance depend only on \underline{uID}.
     \item \textbf{Table}: \underline{tID} is the primary key; attributes like clean\_state and ttID depend only on \underline{tID}.
     \item \textbf{Order}: \underline{oID} is the primary key; attributes such as cID, tID, receptionist\_ID, check\_in\_state, price, and order\_time depend only on \underline{oID}.
-    \item \textbf{Orders\_Dishes}: (\underline{oID}, \underline{dID}) as the composite key; attributes such as quantity and customization depend on both \underline{oID} and \underline{dID}.
+    \item \textbf{Orders\_Dishes}: (\underline{oID}, \underline{dID}) as the composite key; attributes such as quantity depend on both \underline{oID} and \underline{dID}.
 \end{itemize}
 
 \textbf{No decomposition needed}, as all schemas already satisfy 3NF. If decomposition were necessary (e.g., if a non-prime attribute depended on another non-prime attribute), we would apply the standard 3NF decomposition steps:
@@ -340,53 +340,283 @@ During the data entry stage, the database simulates the large-scale data environ
 
 
 %========================================================
+
+
 \section{Features}
-\subsection{Triggers}
-Triggers are designed to automatically update customer balances and table cleanliness statuses when orders are created or completed. The following triggers ensure data consistency and automate critical business processes:
 
-\begin{enumerate}
-\item \textbf{Automatically Update Total Order Amount}
+\subsection{Trigger: \texttt{update\_order\_total\_price\_on\_dish\_change}}
+
+\subsection*{Table: \texttt{orders\_dishes}}
+This trigger updates the total price of an order whenever there are changes to its associated dishes.
+
+\subsubsection*{AFTER INSERT}
+
+Triggered after a new record is inserted into the \texttt{orders\_dishes} table:
 \begin{itemize}
-\item \textbf{Scenario}: Updates the \texttt{total\_amount} field in the \texttt{order} table whenever items are inserted into or deleted from the \texttt{orders\_dishes} table.
-\item \textbf{Trigger Type}: \texttt{AFTER INSERT} and \texttt{AFTER DELETE} on \texttt{orders\_dishes}.
-\item \textbf{Logic}: The trigger calculates the total amount by multiplying the dish quantity with its price (queried from the \texttt{menu} table) and updates the corresponding order record.
+    \item Retrieves the price of the inserted dish from the \texttt{menu} table.
+    \item Increases the total price of the corresponding order in the \texttt{ord} table by the product of quantity and dish price.
 \end{itemize}
 
-\item \textbf{Log Order Status Changes}  
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_orders_dishes_after_insert_update_order_price
+AFTER INSERT ON orders_dishes
+FOR EACH ROW
+BEGIN
+    DECLARE dish_price DECIMAL(10,2);
+    SELECT price INTO dish_price FROM menu WHERE dID = NEW.dID;
+    UPDATE ord
+    SET price = price + (NEW.quantity * dish_price)
+    WHERE oID = NEW.oID;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
+
+\subsubsection*{AFTER UPDATE}
+Triggered after a record in \texttt{orders\_dishes} is updated:
 \begin{itemize}
-    \item \textbf{Scenario}: Records historical changes of order statuses (e.g., from \texttt{"In Progress"} to \texttt{"Completed"}) in a dedicated log table.  
-    \item \textbf{Trigger Type}: \texttt{BEFORE UPDATE} on \texttt{order}.  
-    \item \textbf{Logic}: Checks if the status field is modified. If changed, inserts a new entry into \\
-     \texttt{order\_status\_log} with timestamps and status transitions.  
+    \item Fetches the old and new dish prices from the \texttt{menu} table.
+    \item Updates the total price of the order by subtracting the old amount and adding the new amount.
 \end{itemize}
 
-\item \textbf{Automatic Inventory Deduction}  
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_orders_dishes_after_update_update_order_price
+AFTER UPDATE ON orders_dishes
+FOR EACH ROW
+BEGIN
+    DECLARE old_dish_price DECIMAL(10,2);
+    DECLARE new_dish_price DECIMAL(10,2);
+
+    SELECT price INTO old_dish_price FROM menu WHERE dID = OLD.dID;
+    SELECT price INTO new_dish_price FROM menu WHERE dID = NEW.dID;
+
+    UPDATE ord
+    SET price = price - (OLD.quantity * old_dish_price) + (NEW.quantity * new_dish_price)
+    WHERE oID = NEW.oID;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
+
+\subsubsection*{AFTER DELETE}
+Triggered after a record is deleted from \texttt{orders\_dishes}:
 \begin{itemize}
-    \item \textbf{Scenario}: Reduces dish stock in the \texttt{menu} table when an order is marked as \texttt{`Completed;}.  
-    \item \textbf{Trigger Type}: \texttt{AFTER UPDATE} on \texttt{order}.  
-    \item \textbf{Logic}: Activates only when the status transitions to \texttt{"Completed"}. Deducts the ordered quantities from the corresponding dish inventory.  
+    \item Retrieves the dish price from the \texttt{menu} table.
+    \item Decreases the total price of the associated order by the removed item's cost.
 \end{itemize}
 
-\item \textbf{Data Integrity Validation}  
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_orders_dishes_after_delete_update_order_price
+AFTER DELETE ON orders_dishes
+FOR EACH ROW
+BEGIN
+    DECLARE dish_price DECIMAL(10,2);
+    SELECT price INTO dish_price FROM menu WHERE dID = OLD.dID;
+    UPDATE ord
+    SET price = price - (OLD.quantity * dish_price)
+    WHERE oID = OLD.oID;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
+
+\subsection{Trigger: \texttt{update\_table\_status\_on\_order\_completion}}
+
+\subsection*{Table: \texttt{ord}}
+This trigger updates the status of the table associated with an order once the order is completed.
+
 \begin{itemize}
-    \item \textbf{Scenario}: Ensures that every \texttt{dish\_id} added to \texttt{orders\_dishes} exists in the \texttt{menu} table.  
-    \item \textbf{Trigger Type}: \texttt{BEFORE INSERT} on \texttt{orders\_dishes}.  
-    \item \textbf{Logic}: Validates the existence of \texttt{dish\_id} in the \texttt{menu} table. Raises an error if the dish is invalid, preventing invalid data insertion.  
+    \item Triggered after an update to the \texttt{ord} table.
+    \item If the \texttt{check\_in\_status} changes to \texttt{completed}:
+    \begin{itemize}
+        \item Finds the table associated with the order via the \texttt{order\_table} relation.
+        \item Updates the corresponding record in the \texttt{table} table to set \texttt{clean\_status} to \texttt{dirty}.
+    \end{itemize}
+\end{itemize} 
+
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_ord_after_update_set_table_dirty
+AFTER UPDATE ON ord
+FOR EACH ROW
+BEGIN
+    DECLARE v_tID INT;
+
+    IF NEW.check_in_status = 'completed' AND OLD.check_in_status <> 'completed' THEN
+        SELECT tID INTO v_tID FROM order_table WHERE oID = NEW.oID LIMIT 1;
+        IF v_tID IS NOT NULL THEN
+            UPDATE `table`
+            SET clean_status = 'dirty'
+            WHERE tID = v_tID;
+        END IF;
+    END IF;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
+
+\section{Trigger: \texttt{manage\_table\_type\_remain}}
+
+\subsection*{Table: \texttt{table\_table\_type}}
+These triggers maintain the remaining count of tables per type in the \texttt{table\_type} table.
+
+\subsubsection*{AFTER INSERT}
+\begin{itemize}
+    \item Increments the \texttt{remain} field for the relevant \texttt{ttID} by 1.
 \end{itemize}
 
-\end{enumerate}
+\subsubsection*{AFTER INSERT}
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_table_table_type_after_insert_update_remain
+AFTER INSERT ON table_table_type
+FOR EACH ROW
+BEGIN
+    IF NEW.ttID IS NOT NULL THEN
+        UPDATE table_type
+        SET remain = COALESCE(remain, 0) + 1
+        WHERE ttID = NEW.ttID;
+    END IF;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
 
-\subsubsection*{Key Implementation Notes}
+\subsubsection*{AFTER DELETE}
 \begin{itemize}
-\item Use database indexing (e.g., on \texttt{dish\_id} and \texttt{order\_id}) to optimize trigger performance.
-\item Ensure transaction atomicity to avoid partial updates during concurrent operations.
-\item Regularly monitor trigger execution times to mitigate potential performance bottlenecks.
+    \item Decrements the \texttt{remain} field for the relevant \texttt{ttID} by 1, ensuring it doesn't go below 0.
+\end{itemize}
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_table_table_type_after_delete_update_remain
+AFTER DELETE ON table_table_type
+FOR EACH ROW
+BEGIN
+    IF OLD.ttID IS NOT NULL THEN
+        UPDATE table_type
+        SET remain = GREATEST(0, COALESCE(remain, 1) - 1)
+        WHERE ttID = OLD.ttID;
+    END IF;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
+
+\subsubsection*{AFTER UPDATE}
+\begin{itemize}
+    \item If the \texttt{ttID} is changed:
+    \begin{itemize}
+        \item Decreases the remaining count of the old \texttt{ttID}.
+        \item Increases the remaining count of the new \texttt{ttID}.
+    \end{itemize}
+\end{itemize}
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_table_table_type_after_update_update_remain
+AFTER UPDATE ON table_table_type
+FOR EACH ROW
+BEGIN
+    IF OLD.ttID <> NEW.ttID THEN
+        IF OLD.ttID IS NOT NULL THEN
+            UPDATE table_type
+            SET remain = GREATEST(0, COALESCE(remain, 1) - 1)
+            WHERE ttID = OLD.ttID;
+        END IF;
+        IF NEW.ttID IS NOT NULL THEN
+            UPDATE table_type
+            SET remain = COALESCE(remain, 0) + 1
+            WHERE ttID = NEW.ttID;
+        END IF;
+    END IF;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
+
+\subsection*{Table: \texttt{ord} -- Triggering via order status changes}
+
+\subsubsection*{AFTER UPDATE}
+This trigger adjusts the remaining number of tables per type based on changes to an order's \texttt{check\_in\_status}:
+
+\begin{itemize}
+    \item When changing to \texttt{occupying}:
+    \begin{itemize}
+        \item Decreases the \texttt{remain} field of the corresponding table type.
+    \end{itemize}
+    \item When changing from \texttt{occupying} to \texttt{completed} or \texttt{pending}:
+    \begin{itemize}
+        \item Increases the \texttt{remain} field of the corresponding table type.
+    \end{itemize}
 \end{itemize}
 
-This design ensures robust data management while adhering to business rules and minimizing manual intervention.
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_ord_status_change_update_table_type_remain
+AFTER UPDATE ON ord
+FOR EACH ROW
+BEGIN
+    DECLARE v_tID INT;
+    DECLARE v_ttID INT;
 
-\subsection{Image Storage}
-Images are stored in our server to demonstrate various table types. An ``img'' field is used in the Table\_type entity to store table type image paths, enhancing the visual presentation for customers.
+    SELECT tID INTO v_tID FROM order_table WHERE oID = NEW.oID LIMIT 1;
+
+    IF v_tID IS NOT NULL THEN
+        SELECT ttID INTO v_ttID FROM table_table_type WHERE tID = v_tID LIMIT 1;
+
+        IF v_ttID IS NOT NULL THEN
+            IF (OLD.check_in_status <> 'occupying' OR OLD.check_in_status IS NULL)
+                AND NEW.check_in_status = 'occupying' THEN
+                UPDATE table_type
+                SET remain = GREATEST(0, COALESCE(remain, 1) - 1)
+                WHERE ttID = v_ttID;
+            ELSEIF OLD.check_in_status = 'occupying'
+                AND (NEW.check_in_status = 'completed' OR NEW.check_in_status = 'pending') THEN
+                UPDATE table_type
+                SET remain = COALESCE(remain, 0) + 1
+                WHERE ttID = v_ttID;
+            END IF;
+        END IF;
+    END IF;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
+
+\subsubsection*{AFTER INSERT}
+\begin{itemize}
+    \item If the new order's \texttt{check\_in\_status} is \texttt{occupying}, the corresponding table type's \texttt{remain} count is decreased by 1.
+\end{itemize}
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER trg_ord_after_insert_update_table_type_remain
+AFTER INSERT ON ord
+FOR EACH ROW
+BEGIN
+    DECLARE v_tID INT;
+    DECLARE v_ttID INT;
+
+    IF NEW.check_in_status = 'occupying' THEN
+        SELECT tID INTO v_tID FROM order_table WHERE oID = NEW.oID LIMIT 1;
+        IF v_tID IS NOT NULL THEN
+            SELECT ttID INTO v_ttID FROM table_table_type WHERE tID = v_tID LIMIT 1;
+            IF v_ttID IS NOT NULL THEN
+                UPDATE table_type
+                SET remain = GREATEST(0, COALESCE(remain, 1) - 1)
+                WHERE ttID = v_ttID;
+            END IF;
+        END IF;
+    END IF;
+END;
+//
+DELIMITER ;
+\end{lstlisting}
+
+
+\subsection{BLOB}
+BLOB fields are used in the Table\_type entity to store table type images, enhancing the visual presentation for customers.
 
 
 %========================================================
@@ -726,20 +956,22 @@ END;
 %========================================================
 \section{Contribution}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Team Member Contributions}
 \begin{tabular}{llp{10cm}}
 \toprule
 \textbf{Name} & \textbf{Student ID} & \textbf{Contribution} \\
 \midrule
-Li Xinze & 2330026083 & Code and database implementation \\
-Li Jiale & 2330026073 & Code and database implementation \\
-Tian Zhiwen & 2230033036 & ER diagram design, Trigger implementation, Report writing \\
-Yan Shan & 2230033048 & Dataset insert \\
+Li Xinze & 2330026083 & Frontend and backend of: login/logout, registration, home, book, credit, order/order-detail, admin, receptionist, cleaner, and trigger implementation, PPT part4\\
+Li Jiale & 2330026073 & Frontend and backend of:  menu modules, PPT part3 \\
+Tian Zhiwen & 2230033036 & ER diagram design, trigger implementation, and report writing, PPT part2\\
+Yan Shan & 2230033048 & Dataset insertion, PPT part1\\
+
 \bottomrule
 \end{tabular}
 \end{table}
+
 
 
 
